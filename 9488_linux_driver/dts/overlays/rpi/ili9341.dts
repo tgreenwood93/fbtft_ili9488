@@ -1,0 +1,61 @@
+/*
+ * Device Tree overlay for 2x ili9488 3.5
+ *
+ */
+
+/dts-v1/;
+/plugin/;
+
+/ {
+	compatible = "brcm,bcm2835", "brcm,bcm2708", "brcm,bcm2709";
+
+	fragment@0 {
+		target = <&spi0>;
+		__overlay__ {
+			status = "okay";
+
+			spidev@0{
+				status = "disabled";
+			};
+
+			spidev@1{
+				status = "disabled";
+			};
+		};
+	};
+
+	fragment@1 {
+		target = <&spi0>;
+		__overlay__ {
+			/* needed to avoid dtc warning */
+			#address-cells = <1>;
+			#size-cells = <0>;
+
+			ili9341@0{
+				compatible = "ilitek,ili9488";
+				reg = <0>;
+
+				spi-max-frequency = <32000000>;
+				rotate = <0>;
+				buswidth = <8>;
+				reset-gpios = <&gpio 25 0>;
+				dc-gpios = <&gpio 24 0>;
+				led-gpios = <&gpio 18 1>;
+				debug = <4>;
+			};
+
+			ili9341@1{
+				compatible = "ilitek,ili9488";
+				reg = <1>;
+
+				spi-max-frequency = <32000000>;
+				rotate = <0>;
+				buswidth = <8>;
+				reset-gpios = <&gpio 27 0>;
+				dc-gpios = <&gpio 22 0>;
+				led-gpios = <&gpio 13 1>;
+				debug = <4>;
+			};
+		};
+	};
+};
